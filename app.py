@@ -18,8 +18,14 @@ You can use the sidebar widgets to filter the data and explore various visualiza
 
 # Sidebar Filters
 st.sidebar.subheader('Filter Data')
-filter_sex = st.sidebar.multiselect('Select Sex', titanic_data['sex'].unique(), default=titanic_data['sex'].unique().tolist())
-filter_class = st.sidebar.multiselect('Select Passenger Class', titanic_data['class'].unique(), default=titanic_data['class'].unique().tolist())
+sex_options = titanic_data['sex'].unique()
+default_sex = sex_options.tolist()  # Set default to all options
+filter_sex = st.sidebar.multiselect('Select Sex', sex_options, default=default_sex)
+
+class_options = titanic_data['class'].unique()
+default_class = class_options.tolist()  # Set default to all options
+filter_class = st.sidebar.multiselect('Select Passenger Class', class_options, default=default_class)
+
 filter_age = st.sidebar.slider('Age Range', int(titanic_data['age'].min()), int(titanic_data['age'].max()), (10, 60))
 
 # Apply Filters
