@@ -65,7 +65,7 @@ This chart visualizes the age distribution of passengers who survived and those 
 
 The distribution plot with the label 'Survived' shows the age distribution of passengers who survived (where 'survived' == 1). The distribution plot with the label 'Not Survived' shows the age distribution of passengers who did not survive (where 'survived' == 0).
 
-By comparing the two distributions, you can identify if there were any notable differences in the age distributions between survivors and non-survivors. For example, if one distribution is skewed towards younger or older ages compared to the other, it could indicate that age played a role in survival rates.
+By comparing the two distributions, you can identify if there were any notable differences in the age distributions between survivors and non-survivors.
 """)
 fig, ax = plt.subplots(figsize=(10, 6))
 sns.distplot(filtered_data[filtered_data['survived'] == 1]['age'], label='Survived', ax=ax)
