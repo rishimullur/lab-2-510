@@ -26,7 +26,7 @@ filtered_data = data[data['label'] == label_filter]
 if not filtered_data.empty:
     random_index = np.random.choice(filtered_data.index)
     st.subheader(f'Random Image from Label {label_filter}')
-    st.image(filtered_data.iloc[random_index, :-1].values.reshape(28, 28), cmap='gray')
+    st.image(filtered_data.loc[random_index, filtered_data.columns[:-1]].values.reshape(28, 28), cmap='gray')
 
 # Visualize the distribution of labels
 st.subheader('Label Distribution')
