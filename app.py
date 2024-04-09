@@ -1,44 +1,50 @@
 import streamlit as st
-import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
-from torchvision.datasets import MNIST
 
-# Load the MNIST dataset
-mnist = MNIST(root='data', download=True)
+# Load the Titanic Survival Dataset
+titanic_data = sns.load_dataset('titanic')
 
-# Prepare the data
-X = mnist.data.numpy().reshape(-1, 28 * 28) / 255
-y = mnist.targets.numpy()
-data = pd.DataFrame(X, columns=[f'pixel_{i}' for i in range(28 * 28)])
-data['label'] = y
+# Title and Overview
+st.title('Titanic Survival Analysis')
+st.markdown("""
+This app provides an exploratory analysis of the Titanic Survival Dataset.
 
-# Streamlit app
-st.title('MNIST Dataset Visualization')
-st.markdown('This web app allows you to explore and visualize the MNIST dataset.')
+The dataset contains information about passengers aboard the Titanic, including their survival status, age, sex, passenger class, and more.
 
-# Filter data by label
-label_filter = st.sidebar.selectbox('Select Label', sorted(data['label'].unique()))
-filtered_data = data[data['label'] == label_filter]
+You can use the sidebar widgets to filter the data and explore various visualizations.
+""")
 
-# Display a random image from the filtered data
-if not filtered_data.empty:
-    random_index = np.random.choice(filtered_data.index)
-    st.subheader(f'Random Image from Label {label_filter}')
-    st.image(filtered_data.loc[random_index, filtered_data.columns[:-1]].values.reshape(28, 28), cmap='gray')
+# Sidebar Filters
+st.sidebar.subheader('Filter Data')
+filter_sex = st.sidebar.multiselect('Select Sex', titanic_data['sex'].unique(), default=titanic_data['sex'].unique())
+filter_class = st.sidebar.multiselect('Select Passenger Class', titanic_data['class'].unique(), default=titanic_data['class'].unique())
+filter_age = st.sidebar.slider('Age Range', int(titanic_data['age'].min()), int(titanic_data['age'].max()), (10, 60))
 
-# Visualize the distribution of labels
-st.subheader('Label Distribution')
+# Apply Filters
+filtered_data = titanic_data[
+    (titanic_data['sex'].isin(filter_sex)) &
+    (titanic_data['class'].isin(filter_class)) &
+    (titanic_data['age'].between(filter_age[0], filter_age[1]))
+]
+
+# Visualization: Survival Rate by Sex
+st.subheader('Survival Rate by Sex')
 fig, ax = plt.subplots()
-sns.countplot(data=data, x='label', ax=ax)
+sns.barplot(x='sex', y='survived', data=filtered_data, ax=ax)
 st.pyplot(fig)
 
-# Visualize the pixel intensity distributions
-st.subheader('Pixel Intensity Distributions')
-selected_pixels = st.multiselect('Select Pixels', data.columns[:-1], default=['pixel_0'])
+# Visualization: Survival Rate by Passenger Class
+st.subheader('Survival Rate by Passenger Class')
 fig, ax = plt.subplots()
-for pixel in selected_pixels:
-    sns.distplot(data[pixel], ax=ax, label=pixel)
+sns.barplot(x='class', y='survived', data=filtered_data, ax=ax)
+st.pyplot(fig)
+
+# Visualization: Age Distribution of Survivors and Non-Survivors
+st.subheader('Age Distribution of Survivors and Non-Survivors')
+fig, ax = plt.subplots(figsize=(10, 6))
+sns.distplot(filtered_data[filtered_data['survived'] == 1]['age'], label='Survived', ax=ax)
+sns.distplot(filtered_data[filtered_data['survived'] == 0]['age'], label='Not Survived', ax=ax)
 ax.legend()
 st.pyplot(fig)
