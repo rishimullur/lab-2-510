@@ -1,4 +1,6 @@
-# Titanic Survival Analysis App
+# Titanic Survival Analysis App 
+
+##Improvement over previous submission - Well defined Readme
 
 This is a Streamlit app that provides an exploratory analysis of the Titanic Survival Dataset. The dataset contains information about passengers aboard the Titanic, including their survival status, age, sex, passenger class, and more.
 
