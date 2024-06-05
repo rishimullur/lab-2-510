@@ -30,6 +30,8 @@ This is a Streamlit app that provides an exploratory analysis of the Titanic Sur
 ```
 pip install streamlit pandas matplotlib seaborn
 ```
+
+or Install the required dependencies via ``` pip install -r requirements.txt ```
 ## Usage
 
 1. Open a terminal or command prompt and navigate to the project directory.
